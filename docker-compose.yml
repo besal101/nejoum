@@ -1,0 +1,32 @@
+version: "3"
+services:
+  server:
+    build:
+      context: ./server
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+    restart: always
+    environment:
+      DATABASE_URL: "postgresql://nejoum:nejoum@postgres:5432/nejoum?schema=public"
+  client:
+    build:
+      context: ./client
+    ports:
+      - "3000:3000"
+  postgres:
+    image: "postgres:16"
+    container_name: postgres
+    hostname: postgres
+    environment:
+      POSTGRES_USER: nejoum
+      POSTGRES_PASSWORD: nejoum
+      POSTGRES_DB: nejoum
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    restart: always
+    ports:
+      - "5432:5432"
+volumes:
+  postgres:
